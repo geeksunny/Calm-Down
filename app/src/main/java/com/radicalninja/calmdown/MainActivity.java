@@ -29,6 +29,19 @@ public class MainActivity extends WearableActivity implements View.OnClickListen
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isPlaying) {
+            pause();
+        }
+    }
+
+    @Override
     public void onEnterAmbient(Bundle ambientDetails) {
         super.onEnterAmbient(ambientDetails);
         //updateDisplay();
@@ -53,14 +66,22 @@ public class MainActivity extends WearableActivity implements View.OnClickListen
 
     private void togglePlayState() {
         if (isPlaying) {
-            playButton.setImageResource(R.drawable.ic_play_circle_outline);
-            isPlaying = false;
-            stopVibrations();
+            pause();
         } else {
-            playButton.setImageResource(R.drawable.ic_pause_circle_outline);
-            isPlaying = true;
-            startVibrations();
+            play();
         }
+    }
+
+    private void play() {
+        playButton.setImageResource(R.drawable.ic_pause_circle_outline);
+        isPlaying = true;
+        startVibrations();
+    }
+
+    private void pause() {
+        playButton.setImageResource(R.drawable.ic_play_circle_outline);
+        isPlaying = false;
+        stopVibrations();
     }
 
     private void startVibrations() {
