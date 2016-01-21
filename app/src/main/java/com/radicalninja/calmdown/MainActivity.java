@@ -1,5 +1,7 @@
 package com.radicalninja.calmdown;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.wearable.activity.WearableActivity;
@@ -13,7 +15,7 @@ public class MainActivity extends WearableActivity implements View.OnClickListen
 
     private boolean isPlaying;
     private BoxInsetLayout containerView;
-    private ImageView playButton;
+    private ImageView playButton, icon;
     private Vibrator vibrator;
 
     @Override
@@ -21,11 +23,12 @@ public class MainActivity extends WearableActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         setContentView(R.layout.activity_main);
-        //setAmbientEnabled();
+        setAmbientEnabled();
 
         containerView = (BoxInsetLayout) findViewById(R.id.container);
         playButton = (ImageView) findViewById(R.id.play_button);
         playButton.setOnClickListener(this);
+        icon = (ImageView) findViewById(R.id.icon);
     }
 
     @Override
@@ -44,18 +47,18 @@ public class MainActivity extends WearableActivity implements View.OnClickListen
     @Override
     public void onEnterAmbient(Bundle ambientDetails) {
         super.onEnterAmbient(ambientDetails);
-        //updateDisplay();
+        updateDisplay();
     }
 
     @Override
     public void onUpdateAmbient() {
         super.onUpdateAmbient();
-        //updateDisplay();
+        updateDisplay();
     }
 
     @Override
     public void onExitAmbient() {
-        //updateDisplay();
+        updateDisplay();
         super.onExitAmbient();
     }
 
@@ -93,12 +96,14 @@ public class MainActivity extends WearableActivity implements View.OnClickListen
     }
 
     private void updateDisplay() {
-//        if (isAmbient()) {
-//            containerView.setBackgroundColor(getResources().getColor(android.R.color.black));
-//            textView.setTextColor(getResources().getColor(android.R.color.white));
-//        } else {
-//            containerView.setBackground(null);
-//            textView.setTextColor(getResources().getColor(android.R.color.black));
-//        }
+        if (isAmbient()) {
+            containerView.setBackgroundColor(getResources().getColor(android.R.color.black));
+            icon.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            playButton.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        } else {
+            containerView.setBackground(null);
+            icon.clearColorFilter();
+            playButton.clearColorFilter();
+        }
     }
 }
